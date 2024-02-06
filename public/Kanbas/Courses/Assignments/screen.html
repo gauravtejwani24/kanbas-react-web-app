@@ -11,6 +11,7 @@
     ></script>
     <link rel="stylesheet" href="/libs/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="/Kanbas/Courses/Assignments/index.css" />
+    <link rel="stylesheet" href="/Kanbas/Courses/Modules/index.css"/>
   </head>
 
   <body>
@@ -69,19 +70,35 @@
       </div>
 
       <div style="width: 100%">
-        <div class="d-flex justify-content-between" style="margin: 10px">
-          <span
-            ><a href="#" style="color: red; text-decoration: none"
-              >CS5610.11744.202310</a
-            >
-            >
-            <a href="#" style="text-decoration: none; color: inherit"
-              >Assignments</a
-            ></span
-          >
-          <button type="button">
-            <i class="fa-solid fa-glasses"></i> Student View
-          </button>
+
+        <div class="d-none d-md-block">
+          <div class="d-flex justify-content-between" style="margin: 10px">
+            <div class="d-flex">
+              <a style="margin-right: 8px" href=""
+                ><i
+                  class="fa-solid fa-bars"
+                  style="margin-top: 3px; color: #ff7070"
+                  aria-hidden="true"
+                ></i
+              ></a>
+              <nav style="--bs-breadcrumb-divider: '>'" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item wd-top-bar">
+                    <a href="/Kanbas/Courses/Home/screen.html"
+                      >CS5610.11744.202310</a
+                    >
+                  </li>
+                  <li class="breadcrumb-item active wd-top-bar-text">
+                    Assignments
+                  </li>
+                </ol>
+              </nav>
+            </div>
+
+            <button type="button">
+              <i class="fa-solid fa-glasses"></i> Student View
+            </button>
+          </div>
         </div>
 
         <div class="row">
