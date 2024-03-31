@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import { modules } from "../../Database";
 import {
@@ -18,15 +18,45 @@ import {
 } from "react-icons/fa";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import * as client from "./client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { addModule, deleteModule, updateModule, setModule } from "./reducer";
+import {
+  addModule,
+  deleteModule,
+  updateModule,
+  setModule,
+  setModules,
+} from "./reducer";
 import { KanbasState } from "../../store";
 
 function ModuleList() {
   const { courseId } = useParams();
 
-  
+  useEffect(() => {
+    client.findModulesForCourse(courseId).then((modules) =>
+      dispatch(setModules(modules))
+    );
+  }, [courseId]);
+
+  const handleAddModule = () => {
+    client.createModule(courseId, module).then((module) => {
+      dispatch(addModule(module));
+    });
+  };
+
+  const handleDeleteModule = (moduleId: string) => {
+    client.deleteModule(moduleId).then((status) => {
+      dispatch(deleteModule(moduleId));
+    });
+  };
+
+  const handleUpdateModule = async () => {
+    const status = await client.updateModule(module);
+    dispatch(updateModule(module));
+  };
+
+
 
   const moduleList = useSelector(
     (state: KanbasState) => state.modulesReducer.modules
@@ -99,17 +129,22 @@ function ModuleList() {
                 value={module.name}
                 className="form-group"
                 onChange={(e) =>
-                    dispatch(setModule({ ...module, name: e.target.value }))
-                  }/>
-        
+                  dispatch(setModule({ ...module, name: e.target.value }))
+                }
+              />
             </div>
             <div style={{ marginLeft: "5px" }}>
               <button
                 className="btn btn-danger btn-sm me-1"
-                onClick={() => dispatch(addModule({ ...module, course: courseId }))}>
+                onClick={handleAddModule
+                }
+              >
                 Add
               </button>
-              <button className="btn btn-primary btn-sm" onClick={() => dispatch(updateModule(module))}>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={handleUpdateModule}
+              >
                 Update
               </button>
             </div>
@@ -120,13 +155,13 @@ function ModuleList() {
               className="form-group"
               onChange={(e) =>
                 dispatch(setModule({ ...module, description: e.target.value }))
-              }/>
-    
+              }
+            />
           </div>
         </li>
 
         {moduleList
-          .filter((module) => module.course === courseId)
+          .filter((module) => module?.course === courseId)
 
           .map((module, index) => (
             <li
@@ -146,8 +181,8 @@ function ModuleList() {
                       width: "55px",
                       color: "white",
                     }}
-                    onClick={() => dispatch(deleteModule(module._id))}>
-
+                    onClick={() => handleDeleteModule(module._id)}
+                  >
                     Delete
                   </button>
 
@@ -159,8 +194,8 @@ function ModuleList() {
                       width: "55px",
                       color: "white",
                     }}
-                    onClick={() => dispatch(setModule(module))}>
-
+                    onClick={() => dispatch(setModule(module))}
+                  >
                     Edit
                   </button>
 
@@ -169,7 +204,7 @@ function ModuleList() {
                   <FaEllipsisV className="ms-2" />
                 </span>
               </div>
-              {selectedModule._id === module._id && (
+              {selectedModule?._id === module?._id && (
                 <ul className="list-group">
                   {module.lessons?.map(
                     (lesson: {
