@@ -16,16 +16,29 @@ import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Grades from "./Grades";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-function Courses({ courses }: { courses: any[]; }) {
+function Courses() {
   const { courseId } = useParams();
   const { pathname } = useLocation();
+
+  const COURSES_API = "http://localhost:4000/api/courses";
+  const [course, setCourse] = useState<any>({ _id: "", number: "" });
+  const findCourseById = async (courseId?: string) => {
+    const response = await axios.get(`${COURSES_API}/${courseId}`);
+    setCourse(response.data);
+  };
+
   const [slash, kanbas, cour, id, screen, assignment] = pathname.split("/");
   const isAssignmentScreen = assignment ? true : false;
+  useEffect(() => {
+    findCourseById(courseId);
+  }, [courseId]);
 
-  const course = courses.find((course) => course._id === courseId);
-  const isStudentView = (screen==='Home')||(screen==='Modules')
-  
+  //const course = courses.find((course) => course._id === courseId);
+  const isStudentView = screen === "Home" || screen === "Modules";
+
   return (
     <>
       <div className="d-flex justify-content-between">
@@ -47,7 +60,7 @@ function Courses({ courses }: { courses: any[]; }) {
                   }}
                   to={`/Kanbas/Courses/${courseId}/Home`}
                 >
-                {course?.number}{" "}
+                  {course?.number}{" "}
                 </Link>
               </li>
               {!isAssignmentScreen ? (
@@ -56,33 +69,29 @@ function Courses({ courses }: { courses: any[]; }) {
                 </li>
               ) : (
                 <>
-                <li className="breadcrumb-item wd-top-bar">
-                  <Link
-                    style={{
-                      marginTop: "3px",
-                      marginLeft: "2px",
-                      textDecoration: "none",
-                      paddingTop: "10px",
-                      color: "red",
-                    }}
-                    to={`/Kanbas/Courses/${courseId}/Assignments`}
-                  >
-                    Assignments{" "}
-                  </Link>
-                </li>
+                  <li className="breadcrumb-item wd-top-bar">
+                    <Link
+                      style={{
+                        marginTop: "3px",
+                        marginLeft: "2px",
+                        textDecoration: "none",
+                        paddingTop: "10px",
+                        color: "red",
+                      }}
+                      to={`/Kanbas/Courses/${courseId}/Assignments`}
+                    >
+                      Assignments{" "}
+                    </Link>
+                  </li>
 
-                <li className="breadcrumb-item wd-top-bar">
-                   {assignment}
-                </li>
+                  <li className="breadcrumb-item wd-top-bar">{assignment}</li>
                 </>
-                
               )}
             </ol>
           </nav>
         </div>
 
-        {isStudentView&&<StudentView />}
-        
+        {isStudentView && <StudentView />}
       </div>
       <hr />
       <CourseNavigation />
@@ -101,7 +110,7 @@ function Courses({ courses }: { courses: any[]; }) {
               path="Assignments/:assignmentId"
               element={<AssignmentEditor />}
             />
-            <Route path="Grades" element={<Grades/>} />
+            <Route path="Grades" element={<Grades />} />
             <Route path="Zoom Meetings" element={<h1>Zoom Meetings</h1>} />
             <Route path="Quizzes" element={<h1>Quizzes</h1>} />
             <Route path="People" element={<h1>People</h1>} />
