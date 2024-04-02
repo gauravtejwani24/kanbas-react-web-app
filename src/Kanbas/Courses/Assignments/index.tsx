@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaCheckCircle,
   FaEllipsisV,
@@ -8,11 +8,17 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import { assignments } from "../../Database";
 import Button from "react-bootstrap/Button";
 import { useSelector, useDispatch } from "react-redux";
-import { addAssignment, setAssignment,clearAssignment,deleteAssignment } from "./reducer";
+import {
+  addAssignment,
+  setAssignment,
+  clearAssignment,
+  deleteAssignment,
+  setAssignments,
+} from "./reducer";
 import { KanbasState } from "./../../store";
+import * as service from "./service";
 
 function Assignments() {
   const navigate = useNavigate();
@@ -29,21 +35,28 @@ function Assignments() {
     if (result) {
       return true;
     } else {
-      
       return false;
     }
   };
   const assignment = useSelector(
     (state: KanbasState) => state.assignmentReducer.assignment
   );
-  const assignments = useSelector(
+
+  const handleDeleteAssignment = async (assignmentId: string) => {
+    const res = await service.deleteAssignment(assignmentId);
+    dispatch(deleteAssignment(assignmentId));
+  };
+
+  const { courseId } = useParams();
+  const assignmentList = useSelector(
     (state: KanbasState) => state.assignmentReducer.assignments
   );
-  const { courseId } = useParams();
-  const assignmentList = assignments.filter(
-    (assignment) => assignment.course === courseId
-  );
 
+  useEffect(() => {
+    service.findAssignmentForCourse(courseId).then((assignments) => {
+      dispatch(setAssignments(assignments));
+    });
+  }, [courseId]);
 
   console.log(assignmentList);
 
@@ -127,7 +140,8 @@ function Assignments() {
                       <FaEdit style={{ color: "green" }} />
                     </div>
                     <div className="col wd-fg-color-gray ps-0 ms-2">
-                      <Link onClick={(e)=>dispatch(setAssignment(assignment))}
+                      <Link
+                        onClick={(e) => dispatch(setAssignment(assignment))}
                         style={{ color: "green", textDecoration: "none" }}
                         className="fw-bold ps-0"
                         to={`/Kanbas/Courses/${courseId}/Assignments/${assignment._id}`}
@@ -146,9 +160,9 @@ function Assignments() {
                       <button
                         className="btn m-0 pt-0 pb-0 me-1 btn-danger btn-sm"
                         onClick={() => {
-                          if(handleDelete())
-                             dispatch(deleteAssignment(assignment._id))
-                            
+                          if (handleDelete()) {
+                            handleDeleteAssignment(assignment._id);
+                          }
                         }}
                       >
                         Delete
