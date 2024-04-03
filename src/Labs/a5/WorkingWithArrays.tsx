@@ -9,6 +9,8 @@ interface Todo {
     completed: boolean;
 }
 
+const API_BASE = process.env.REACT_APP_API_BASE;
+
 function WorkingWithArrays() {
     const [errorMessage, setErrorMessage] = useState(null);
   const [todo, setTodo] = useState({
@@ -32,7 +34,7 @@ function WorkingWithArrays() {
   
   };
 
-  const API = "http://localhost:4000/a5/todos";
+  const API = `${API_BASE}/a5/todos`;
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const fetchTodos = async () => {
@@ -90,9 +92,7 @@ function WorkingWithArrays() {
       <a className="btn btn-primary" href={API}>
         Get Todos
       </a>
-      <button onClick={createTodo} className="btn btn-primary">
-        Create Todo
-      </button>
+      
       <h4>Retrieving an Item from an Array by ID</h4>
       <input
         value={todo.id}
@@ -216,22 +216,22 @@ function WorkingWithArrays() {
         Completed
       </label>
       <br></br>
-      <button onClick={postTodo}> Post Todo </button>
+      <button className="btn btn-warning mb-2" onClick={postTodo}> Post Todo </button>
        <br/>     
-      <button onClick={updateTodo}>
+      <button className="btn btn-success mb-2" onClick={updateTodo}>
         Update Todo
       </button>
 
       
       <br />
       
-      <button className="btn btn-primary" onClick={createTodo}>
+      <button className="btn btn-primary mb-2" onClick={createTodo}>
         Create Todo 
       </button>
       
       <br />
       
-      <button className="btn btn-success" onClick={updateTitle}>
+      <button className="btn btn-success mb-2" onClick={updateTitle}>
         Update Title 
       </button>
 
@@ -245,7 +245,7 @@ function WorkingWithArrays() {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
-            {todo.title}
+
 
             <input readOnly checked={todo.completed}
               type="checkbox"/>
