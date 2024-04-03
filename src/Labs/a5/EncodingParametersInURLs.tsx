@@ -46,6 +46,7 @@ function EncodingParametersInURLs() {
         onChange={(e) => setB(parseInt(e.target.value))}
         value={b}
       />
+      <input value={result} type="number" readOnly />
       <h3>Path Parameters</h3>
       <a
         className="btn btn-primary"
@@ -57,7 +58,7 @@ function EncodingParametersInURLs() {
         className="btn btn-danger"
         href={`${API_BASE}/a5/subtract/${a}/${b}`}
       >
-        Substract {a} - {b}
+        Subtract {a} - {b}
       </a>
 
       <a
@@ -84,7 +85,7 @@ function EncodingParametersInURLs() {
         className="btn btn-danger"
         href={`${API_BASE}/a5/calculator?operation=subtract&a=${a}&b=${b}`}
       >
-        Substract {a} - {b}
+        Subtract {a} - {b}
       </a>
 
       <a
@@ -100,13 +101,13 @@ function EncodingParametersInURLs() {
         Divide {a} / {b}
       </a>
 
-      <input value={result} type="number" readOnly />
+      
       <h3>Fetch Result</h3>
       <button onClick={() => fetchSum(a, b)} >
         Fetch Sum of {a} + {b}
       </button>
       <button onClick={() => fetchSubtraction(a, b)} >
-        Fetch Substraction of {a} - {b}
+        Fetch Subtraction of {a} - {b}
       </button>
     </div>
   );
