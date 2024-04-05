@@ -48,6 +48,7 @@ function Kanbas() {
   const COURSES_API = `${API_BASE}/api/courses`;
   const findAllCourses = async () => {
     const response = await axios.get(COURSES_API);
+  
     setCourses(response.data);
   };
   useEffect(() => {

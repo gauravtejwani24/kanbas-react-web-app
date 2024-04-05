@@ -9,6 +9,8 @@ export interface User {
   firstName: string;
   lastName: string;
 }
+
+axios.defaults.withCredentials=true
 export const signin = async (credentials: User) => {
   const response = await axios.post(`${USERS_API}/signin`, credentials);
   return response.data;
@@ -49,5 +51,18 @@ export const findUserById = async (id: string) => {
       axios.get(`${USERS_API}?role=${role}`);
     return response.data;
   };
+
+  export const signup = async (user:any) => {
+    const response = await axios.post(`${USERS_API}/signup`, user);
+    return response.data;
+  };
+
+  export const signout = async () => {
+    const response = await axios.post(`${USERS_API}/signout`);
+    return response.data;
+  };
+  
+  
+  
   
   
