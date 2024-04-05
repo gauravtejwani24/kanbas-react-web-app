@@ -1,13 +1,35 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { courses } from "../Database";
-function Dashboard({ courses, course, setCourse, addNewCourse,
-    deleteCourse, updateCourse }: {
-    courses: any[]; course: any; setCourse: (course: any) => void;
-    addNewCourse: () => void; deleteCourse: (course: any) => void;
-    updateCourse: () => void; }) {
-  
-
+function Dashboard({
+  courses,
+  course,
+  setCourse,
+  addNewCourse,
+  deleteCourse,
+  updateCourse,
+}: {
+  courses: any[];
+  course: any;
+  setCourse: (course: any) => void;
+  addNewCourse: () => void;
+  deleteCourse: (course: any) => void;
+  updateCourse: () => void;
+}) {
+  const handleCourseUpdate = (course: any) => {
+    if (course !== null) {
+      console.log("hi");
+      if (course.startDate && course.startDate !== "") {
+        course.startDate = new Date(course.startDate)
+          .toISOString()
+          .split("T")[0];
+      }
+      if (course.endDate && course.endDate !== "") {
+        course.endDate = new Date(course.endDate).toISOString().split("T")[0];
+      }
+    }
+    setCourse(course);
+  };
 
   return (
     <div className="p-4">
@@ -35,11 +57,12 @@ function Dashboard({ courses, course, setCourse, addNewCourse,
         type="date"
         onChange={(e) => setCourse({ ...course, endDate: e.target.value })}
       />
-      <button onClick={addNewCourse} className="btn btn-danger btn-sm">Add</button>
-      <button onClick={updateCourse} className="btn btn-primary btn-sm" >
+      <button onClick={addNewCourse} className="btn btn-danger btn-sm">
+        Add
+      </button>
+      <button onClick={updateCourse} className="btn btn-primary btn-sm">
         Update
       </button>
-
       <div className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
           {courses.map((course) => (
@@ -62,14 +85,18 @@ function Dashboard({ courses, course, setCourse, addNewCourse,
                   >
                     {course.name}{" "}
                   </Link>
-                  <button onClick={(event) => {
-                event.preventDefault();
-                setCourse(course);
-              }} className="btn btn-success btn-sm">
-              Edit
-            </button>
+                  <button
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleCourseUpdate(course);
+                    }}
+                    className="btn btn-success btn-sm"
+                  >
+                    Edit
+                  </button>
 
-                  <button className="btn btn-danger btn-sm"
+                  <button
+                    className="btn btn-danger btn-sm"
                     onClick={(event) => {
                       event.preventDefault();
                       deleteCourse(course._id);
