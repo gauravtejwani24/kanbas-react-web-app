@@ -97,15 +97,18 @@ export default function UserTable() {
             <td>
               <input
                 value={user.password}
+                placeholder="password"
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
               />
               <input
+                placeholder="Username"
                 value={user.username}
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
               />
             </td>
             <td>
               <input
+                placeholder="firstName"
                 value={user.firstName}
                 onChange={(e) =>
                   setUser({ ...user, firstName: e.target.value })
@@ -114,6 +117,7 @@ export default function UserTable() {
             </td>
             <td>
               <input
+                placeholder="lastName"
                 value={user.lastName}
                 onChange={(e) => setUser({ ...user, lastName: e.target.value })}
               />
@@ -134,7 +138,8 @@ export default function UserTable() {
                 onClick={updateUser}
                 className="me-2 text-success fs-1 text"
               />
-              <BsPlusCircleFill onClick={createUser} />
+              <BsPlusCircleFill className="me-2 text-success fs-1 text" onClick={createUser}
+              style={{color:"green"}} />
             </td>
           </tr>
         </thead>
@@ -146,10 +151,11 @@ export default function UserTable() {
               <td>{user.lastName}</td>
               <td>{user.role}</td>
               <td>
-                <button onClick={() => deleteUser(user)}>
+                <button className="btn btn-danger me-2 ms-2"
+                onClick={() => deleteUser(user)}>
                   <BsTrash3Fill />
                 </button>
-                <button className="btn btn-warning me-2">
+                <button className="btn btn-warning me-2 ms-2">
                   <BsPencil onClick={() => selectUser(user)} />
                 </button>
               </td>
